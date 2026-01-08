@@ -1,47 +1,52 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Docs: https://github.com/Azure/webapps-deploy
 
 name: Build and deploy Node.js app to Azure Web App - aies-prod-web
+
 on:
   push:
     branches:
       - main
-  workflow_dispatch: null
+  workflow_dispatch:
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
-      - name: Checkout
+      # 1️⃣ Checkout source code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
+      # 2️⃣ Setup pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 10
           run_install: false
 
-      - name: Install Node.js
+      # 3️⃣ Setup Node.js with pnpm cache
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22.x"
-          cache: "pnpm"
+          cache: pnpm
 
+      # 4️⃣ Install dependencies
       - name: Install dependencies
-        run: |
-          pnpm install --no-frozen-lockfile
-          pnpm add serve
-          pnpm run build
+        run: pnpm install --frozen-lockfile
 
-      - name: "Deploy to Azure Web App"
-        id: deploy-to-webapp
+      # 5️⃣ Build project
+      - name: Build application
+        run: pnpm run build
+
+      # 6️⃣ Deploy to Azure Web App
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: aies-prod-web
           slot-name: Production
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C78493C213E94BA3AF06D2D377061B96 }}
           package: ./dist
-          publish-profile: ${{
-            secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C78493C213E94BA3AF06D2D377061B96
-            }}
