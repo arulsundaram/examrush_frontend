@@ -1,6 +1,4 @@
-# Docs: https://github.com/Azure/webapps-deploy
-
-name: Build and deploy Node.js app to Azure Web App - aies-prod-web
+name: Build and deploy static app to Azure Web App - aies-prod-web
 
 on:
   push:
@@ -9,50 +7,34 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
 
     steps:
-      # 1️⃣ Checkout repository
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup pnpm
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 10
 
-      # 3️⃣ Setup Node.js
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22.x"
+          cache: "pnpm"
 
-      # 4️⃣ Configure npm authentication (PRIVATE PACKAGE FIX)
-      - name: Configure npm auth
+      - name: Install & Build
         run: |
-          echo "@ai-video-learning:registry=https://registry.npmjs.org/" >> ~/.npmrc
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          pnpm install --no-frozen-lockfile
+          pnpm run build
 
-      # 5️⃣ Install dependencies
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-
-      # 6️⃣ Build application
-      - name: Build application
-        run: pnpm run build
-
-      # 7️⃣ Deploy to Azure Web App
-      - name: Deploy to Azure Web App
+      - name: Deploy
         uses: azure/webapps-deploy@v3
         with:
           app-name: aies-prod-web
           slot-name: Production
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C78493C213E94BA3AF06D2D377061B96 }}
           package: ./dist
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C78493C213E94BA3AF06D2D377061B96 }}
