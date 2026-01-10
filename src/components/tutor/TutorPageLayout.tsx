@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { ChevronRight, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Card } from '@/components/ui/card';
 
 interface BreadcrumbItem {
   code?: string;

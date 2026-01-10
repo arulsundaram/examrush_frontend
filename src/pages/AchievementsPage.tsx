@@ -20,7 +20,6 @@ export function AchievementsPage() {
 
   // Calculate level based on XP (1000 XP per level)
   const level = Math.floor(xp / 1000) + 1;
-  const xpForNextLevel = level * 1000;
   const xpProgress = xp % 1000;
   const xpProgressPercent = (xpProgress / 1000) * 100;
 

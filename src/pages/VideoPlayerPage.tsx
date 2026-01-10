@@ -7,6 +7,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, BookOpen, Lightbulb, FileText, Award } from 'lucide-react';
 
+interface Topic {
+  id: string;
+  title: string;
+  startSeconds: number;
+  endSeconds: number;
+  keywords?: string[];
+  transcriptExcerpt?: string;
+  certificationObjective?: string;
+}
+
 export function VideoPlayerPage() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
@@ -31,7 +41,7 @@ export function VideoPlayerPage() {
     mutationFn: api.updateProgress,
   });
 
-  const topics = topicsData?.topics || [];
+  const topics = (topicsData?.topics || []) as Topic[];
 
   useEffect(() => {
     const startTime = searchParams.get('t');
@@ -88,7 +98,7 @@ export function VideoPlayerPage() {
   };
 
   const currentTopic = topics.find(
-    (topic: any) =>
+    (topic) =>
       currentTime >= topic.startSeconds && currentTime <= topic.endSeconds
   );
 
@@ -136,7 +146,7 @@ export function VideoPlayerPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {topics.map((topic: any) => {
+              {topics.map((topic) => {
                 const isActive =
                   currentTime >= topic.startSeconds &&
                   currentTime <= topic.endSeconds;

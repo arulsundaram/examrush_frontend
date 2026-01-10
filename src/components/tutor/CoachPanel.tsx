@@ -17,7 +17,7 @@ interface CoachPanelProps {
   drill: { drillId: string; questions: any[] } | null;
 }
 
-export function CoachPanel({ mastery, skills, labs, drill }: CoachPanelProps) {
+export function CoachPanel({ mastery, skills: _skills, labs, drill }: CoachPanelProps) {
   const getWeakestSkills = () => {
     if (!mastery) return [];
     return Object.entries(mastery)

@@ -8,6 +8,15 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Play, Search, Clock, GraduationCap } from 'lucide-react';
 
+interface Topic {
+  id: string;
+  title: string;
+  startSeconds: number;
+  endSeconds: number;
+  keywords?: string[];
+  transcriptExcerpt?: string;
+}
+
 export function VideoOverviewPage() {
   const { id } = useParams<{ id: string }>();
   const [prompt, setPrompt] = useState('');
@@ -45,7 +54,7 @@ export function VideoOverviewPage() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const topics = topicsData?.topics || [];
+  const topics = (topicsData?.topics || []) as Topic[];
 
   return (
     <div className="space-y-6">

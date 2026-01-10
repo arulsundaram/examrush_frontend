@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Home,
@@ -6,11 +6,7 @@ import {
   Trophy,
   Award,
   MessageSquare,
-  Menu,
-  X,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
   User,
 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -20,7 +16,6 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,19 +31,6 @@ export function Layout({ children }: LayoutProps) {
     { icon: Award, label: 'Certification', path: '/certification' },
     { icon: MessageSquare, label: 'AI Mentor', path: '/ai-mentor' },
   ];
-
-  // Get current page title based on route
-  const getPageTitle = () => {
-    const path = location.pathname;
-    if (path === '/home' || path === '/') return 'Home';
-    if (path.startsWith('/catalog')) return 'Catalog';
-    if (path.startsWith('/videos')) return 'Video';
-    if (path.startsWith('/achievements')) return 'Achievements';
-    if (path.startsWith('/certification')) return 'Certification';
-    if (path.startsWith('/ai-mentor')) return 'AI Mentor';
-    if (path.startsWith('/exams')) return 'Tutor Mode';
-    return 'AI Learning';
-  };
 
   return (
     <div className="flex flex-col h-screen bg-background">

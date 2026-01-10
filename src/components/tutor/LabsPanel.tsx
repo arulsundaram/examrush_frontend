@@ -32,7 +32,7 @@ export function LabsPanel({ labs, relevantVideos }: LabsPanelProps) {
   const [completedSteps, setCompletedSteps] = useState<Record<string, Set<string>>>({});
 
   const completeLabMutation = useMutation({
-    mutationFn: api.completeLab,
+    mutationFn: (labId: string) => api.completeLab(labId, ''),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tutor'] });
     },

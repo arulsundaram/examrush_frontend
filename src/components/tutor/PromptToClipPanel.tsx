@@ -54,7 +54,7 @@ export function PromptToClipPanel({ topicId, videoId }: PromptToClipPanelProps) 
           </Button>
         </form>
 
-        {searchMutation.data && (
+        {searchMutation.data && searchMutation.data.bestMatch && (
           <div className="space-y-4 pt-4 border-t">
             <div>
               <h4 className="font-semibold mb-2">Best Match</h4>
@@ -83,7 +83,7 @@ export function PromptToClipPanel({ topicId, videoId }: PromptToClipPanelProps) 
               </div>
             </div>
 
-            {searchMutation.data.related.length > 0 && (
+            {searchMutation.data && searchMutation.data.related.length > 0 && (
               <div>
                 <h4 className="font-semibold mb-2">Related Clips</h4>
                 <div className="space-y-2">
